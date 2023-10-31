@@ -70,8 +70,6 @@ int main(int argc, char **argv){ /* ____________________________________________
     /* NO MPI */                          
     posix_memalign_all(&G,&C,&D,&P);
     initGraph (G,C,D,P, SEED);  
-    printGraph(G,C,graph_path);
-    exit(EXIT_SUCCESS);
 
 #endif
 
@@ -153,7 +151,10 @@ int main(int argc, char **argv){ /* ____________________________________________
     if ( mpi_rank != ROOT )
         exit(EXIT_SUCCESS);
 #endif
-
+    printAPSP(G,C,D,P);
+    printGraph(G, C, graph_path);
+    exit(EXIT_SUCCESS);
+    
     mean = sum/(float)NREP;
     printf("\nmedia: %lf\n", mean);
 

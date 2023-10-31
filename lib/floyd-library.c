@@ -154,10 +154,10 @@ void printPath (int G[N][N] , int P[N][N] , int i , int j , FILE *fp) {
 }
 void printAPSP(int G[N][N], int C[N][N], int D[N][N], int P[N][N])
 {
-    int fp;
+    FILE *fp;
     int i, j;
 
-    fp = open("apsp-s.txt", O_WRONLY);
+    fp = fopen("apsp-s.txt", "w+r");
     for (i = 0; i < N; i++)
     {
        for (j = 0; j < N; j++)

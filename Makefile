@@ -49,3 +49,8 @@ graph: graph/graph.dot
 # 	module load nvhpc/22.11
 # 	module load cuda/10.2
 # 	module load openmpi
+
+git:
+	git add *
+	git commit -m "commit automatico"
+	git push -u origin main
