@@ -1,0 +1,4 @@
+gcc -Wall -D_PRINT_DISTANCE=1 -g -c lib/floyd-library.c -o lib/floyd-library.o
+gcc -Wall -D_PRINT_DISTANCE=1 -g -c lib/time-library.c -o lib/time-library.o
+gcc -Wall -D_PRINT_DISTANCE=1 -g -c floyd-main.c
+gcc -Wall -D_PRINT_DISTANCE=1 -g -o floyd-main floyd-main.o lib/floyd-library.o lib/time-library.o 

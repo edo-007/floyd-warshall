@@ -1,0 +1,10 @@
+nvc -Wall -fopenmp -D_USE_OMP=1 -g -c lib/floyd-library.c -o lib/floyd-library.o
+nvc -Wall -fopenmp -D_USE_OMP=1 -g -c lib/time-library.c -o lib/time-library.o
+nvc -Wall -fopenmp -D_USE_OMP=1 -g -c floyd-main.c
+nvc -Wall -fopenmp -D_USE_OMP=1 -g -o floyd-main floyd-main.o lib/floyd-library.o lib/time-library.o 
+
+:: Using [OMP] ::
+	* Number of threads = 10
+
+
+media: 0.523417
