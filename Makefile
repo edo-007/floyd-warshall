@@ -1,7 +1,7 @@
 FLAGS = -Wall 
 CC = gcc
 
-ifeq ($(ff),use)
+ifeq ($(flags),use)
 	FLAGS += -march=native -mtune=native -Ofast -funroll-loops
 # march:  Specify the type of the target processor; possibilities are ( native->  Selects the CPU of the compiling machine)
 
@@ -23,6 +23,10 @@ endif
 ifeq ($(USE_MPI),y)
 	FLAGS += -D_USE_MPI=1 -O3
 	CC = mpicc
+endif
+
+ifeq ($(SERIAL),y)
+	FLAGS += -D_SERIAL
 endif
 
 ifeq ($(PRINT_D),y)

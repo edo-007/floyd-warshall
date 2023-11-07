@@ -152,39 +152,6 @@ void stampa_matrice(int (*mat)[N], int n_row, int n_col, int c){
 }
 
 
-void printPath (int G[N][N] , int P[N][N] , int i , int j , FILE *fp) {
-
-    if ( ( i !=j ) && ( P[i][j] != NIL ) ) 
-    {
-        printPath (G , P , i , P[i][j] , fp ) ;
-        G[P[i][j]][j] = 2;
-        fprintf (fp , " %d " , j ) ;
-        
-    }
-}
-void printAPSP(int G[N][N], int C[N][N], int D[N][N], int P[N][N])
-{
-    FILE *fp;
-    int i, j;
-
-    fp = fopen("apsp-s.txt", "w+r");
-    for (i = 0; i < N; i++)
-    {
-       for (j = 0; j < N; j++)
-       {
-           if (i != j)
-           {
-               fprintf(fp, "%d --> %d: ", i, j);
-               printPath(G, P, i, j, fp);
-               fprintf(fp, " \t\t new_cost=%d oldcost:%d\n", D[i][j], C[i][j]);
-           }
-       }
-    }
-    
-    fclose(fp);
-}
-
-
 void initGraph ( int (*G)[N], int (*C)[N], int (*D)[N],int (*P)[N] , unsigned int seed ) {
     
     int i , j , nedges = 0 , count ;
@@ -277,6 +244,40 @@ void initGraph ( int (*G)[N], int (*C)[N], int (*D)[N],int (*P)[N] , unsigned in
 
 }
 
+
+
+void printPath (int G[N][N] , int P[N][N] , int i , int j , FILE *fp) {
+
+    if ( ( i !=j ) && ( P[i][j] != NIL ) ) 
+    {
+        printPath (G , P , i , P[i][j] , fp ) ;
+        G[P[i][j]][j] = 2;
+        fprintf (fp , " %d " , j ) ;
+        
+    }
+}
+void printAPSP(int G[N][N], int C[N][N], int D[N][N], int P[N][N])
+{
+    FILE *fp;
+    int i, j;
+
+    fp = fopen("apsp-s.txt", "w+r");
+    
+    for (i = 0; i < N; i++) {
+       for (j = 0; j < N; j++) {
+
+           if (i != j) {
+
+               fprintf(fp, "%d --> %d: ", i, j);
+               printPath(G, P, i, j, fp);
+               fprintf(fp, " \t\t new_cost=%d oldcost:%d\n", D[i][j], C[i][j]);
+           }
+       }
+    }
+    
+    fclose(fp);
+}
+
 void printGraph ( int G[N][N] , int C[N][N] , char *fname ) {
 
     int fd;
@@ -294,14 +295,14 @@ void printGraph ( int G[N][N] , int C[N][N] , char *fname ) {
     for ( i=0; i<N ; i++ ) {
 
         for ( j=0; j<N ; j++ ) {
+
             if ( G[i][j] == 1 ) {
-                sprintf(temp , "\t %s%d -> %s%d[label=\"%d\",weight=\"%d\"];\n" , "N" , i , "N" , j , 
-                    C[i][j] , C[i][j] ) ;
+                sprintf(temp , "\t %s%d -> %s%d[label=\"%d\",weight=\"%d\"];\n" , "N" , i , "N" , j , C[i][j] , C[i][j] ) ;
                 write(fd, temp, strlen(temp));
             }   
             if ( G[i][j] == 2 ) {
-                sprintf(temp , "\t %s%d -> %s%d[label=\"%d\",weight=\"%d\",color=red,penwidth=3];\n" ,
-                "N" , i , "N" , j , C[i][j] , C[i][j] ) ;
+                sprintf(temp , "\t %s%d -> %s%d[label=\"%d\",weight=\"%d\",color=red,penwidth=3];\n" , 
+                    "N" , i , "N" , j , C[i][j] , C[i][j] ) ;
                 write(fd, temp, strlen(temp));
             }
         }

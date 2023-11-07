@@ -154,8 +154,10 @@ int main(int argc, char **argv){ /* ____________________________________________
     printf("\nmedia: %lf\n", mean);
 
 #ifdef _PRINT_DISTANCE
-
+    stampa_matrice(P,N,N,'P');
+    stampa_matrice(G,N,N,'g');
     printAPSP(G,C,D,P);
+    stampa_matrice(G,N,N,'G');
     printGraph(G, C, "graph/graph.dot");
 
     /* stampa della matrice */
