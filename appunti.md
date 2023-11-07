@@ -110,6 +110,7 @@ __condivisa__:
 la variabile è condivisa, il che implica che è visibile ed accessibile da ogni thread simultaneamente.
 Di default ogni variabile è condivisa eccetto le variabili utilizzate come contatori dei cicli for.
 
+# OMPTarget
 
 
 
@@ -214,3 +215,16 @@ IN fatti, dato che i pesi sono **positivi**, per ogni k:
 &nbsp;  
 
 Durante la _k-esima_ iterazione ogni elemento della riga k deve essere inviato (in broadcast) ad ogni task della colonna del rispettivo elemento.
+
+* * * 
+### Punti da sviluppare
+
+- **Serial version** with computation of distance and predecessor matrices and grapviz print
+
+- OpenMP version **without** predecessor + print of distance matrix to compare with that of serial version;
+
+- OpenMP target is optional
+
+- MPI version without predecessor + print of distance matrix to compare with that of serial version;
+
+-  make scalability plots (time, speedup and efficiency)

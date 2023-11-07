@@ -1,10 +1,14 @@
-mpicc -Wall -fopenmp -D_USE_OMP=1 -D_USE_MPI=1 -g -c lib/floyd-library.c -o lib/floyd-library.o
-mpicc -Wall -fopenmp -D_USE_OMP=1 -D_USE_MPI=1 -g -c lib/time-library.c -o lib/time-library.o
-mpicc -Wall -fopenmp -D_USE_OMP=1 -D_USE_MPI=1 -g -c floyd-main.c
-mpicc -Wall -fopenmp -D_USE_OMP=1 -D_USE_MPI=1 -g -o floyd-main floyd-main.o lib/floyd-library.o lib/time-library.o 
+mpicc -Wall  -fopenmp -D_USE_OMP=1 -O3 -D_USE_MPI=1 -O3 -g -c lib/floyd-library.c -o lib/floyd-library.o
+mpicc -Wall  -fopenmp -D_USE_OMP=1 -O3 -D_USE_MPI=1 -O3 -g -c lib/time-library.c -o lib/time-library.o
+mpicc -Wall  -fopenmp -D_USE_OMP=1 -O3 -D_USE_MPI=1 -O3 -g -c floyd-main.c
+mpicc -Wall  -fopenmp -D_USE_OMP=1 -O3 -D_USE_MPI=1 -O3 -g -o floyd-main floyd-main.o lib/floyd-library.o lib/time-library.o 
+========================
+  #Tasks            :1
+  #CPUS per task    :1
+========================
 
 :: Using [OMP + MPI] ::
-	* Communicator size = 4
-	* Number of threads = 8
+	* Communicator size = 1
+	* Number of threads = 1
 
-media: 0.375791
+media: 5.995177

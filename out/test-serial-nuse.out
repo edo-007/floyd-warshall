@@ -1,0 +1,10 @@
+gcc -Wall  -g -c lib/floyd-library.c -o lib/floyd-library.o
+gcc -Wall  -g -c lib/time-library.c -o lib/time-library.o
+gcc -Wall  -g -c floyd-main.c
+gcc -Wall  -g -o floyd-main floyd-main.o lib/floyd-library.o lib/time-library.o 
+
+:: Serial version ::
+N: 4096
+NREP:5
+
+media: 192.672487

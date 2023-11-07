@@ -10,13 +10,6 @@
  *
  */
 
-// #ifdef _USE_OMP
-//     #include <omp.h>
-//     #define OMP_PARALLEL_FOR(i,j) _Pragma("omp parallel for private(i,j)")
-// #else
-//     #define OMP_PARALLEL_FOR(i,j)
-// #endif
-
 #include "floyd-library.h"
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -24,17 +17,24 @@
 #include <string.h>
 #include <unistd.h>
 
-
 #ifdef _USE_MPI
     #include <mpi.h>
 #endif
 
 #ifdef _USE_OMP
     #include <omp.h>
-    #define OMP_PARALLEL_FOR(i,j,distance) _Pragma("omp parallel for private(i,j,distance)")
+    #define OMP_PARALLEL_FOR _Pragma("omp parallel for private(i,j,distance)")  
+
+#elif defined _USE_OMP_TARGET
+    #include <omp.h>
+    #define OMP_PARALLEL_FOR  _Pragma("omp target teams distribute parallel for collapse(2) private(distance,i,j)")
 #else
-    #define OMP_PARALLEL_FOR(i,j,distance)
+    #define OMP_PARALLEL_FOR   
 #endif
+
+
+
+
 
 void FloydAlgorithmm ( int G[N][N] , int C[N][N] , int D[N][N] , int P[N][N], int mpi_size, int mpi_rank) {
 
@@ -62,12 +62,15 @@ void FloydAlgorithmm ( int G[N][N] , int C[N][N] , int D[N][N] , int P[N][N], in
         perror("ERROR: allocation of Dp FAILED:" ) ;
         exit(-1);
     } 
-    
+
     /* ROOT sparpaglia D nei buffer Dp di tutti gli altri processi */
     MPI_Scatter( *D, N*n_local_row, MPI_INT, Dp, N*n_local_row, MPI_INT, ROOT, MPI_COMM_WORLD);
     
 #endif
 
+#ifdef _USE_OMP_TARGET
+    #pragma omp target enter data map(to: D[0:N][0:N])
+#endif
     for ( k = 0; k < N ; k++ ) {   
 
 #ifdef _USE_MPI
@@ -86,7 +89,10 @@ void FloydAlgorithmm ( int G[N][N] , int C[N][N] , int D[N][N] , int P[N][N], in
         MPI_Bcast(row_k, N, MPI_INT, block_id, MPI_COMM_WORLD);
 #endif
 
-OMP_PARALLEL_FOR(i, j, distance)
+/* Moving data to the device */
+
+/* OMP directive || OMP TARGET directive */
+OMP_PARALLEL_FOR
         for ( i = 0; i < n_local_row; i++ ) {
             for ( j = 0; j < N ; j++ ) {
 
@@ -105,13 +111,19 @@ OMP_PARALLEL_FOR(i, j, distance)
                 } 
 #endif
             }
-        }
+        } /* end for i */
+
+/* Moving data back to the host */
+
+    } /* end for k */
+
+#ifdef _USE_OMP_TARGET
+    #pragma omp target exit data map(from: D[0:N][0:N])
+#endif
         
-    } 
 
 #ifdef _USE_MPI
     MPI_Gather(Dp, N*n_local_row, MPI_INT,  D, N*n_local_row, MPI_INT, ROOT , MPI_COMM_WORLD);
-
     MPI_Barrier(MPI_COMM_WORLD);
 #endif
 
@@ -122,15 +134,13 @@ void stampa_matrice(int (*mat)[N], int n_row, int n_col, int c){
     int i,j;
 
     printf("\n%c     ",c);
-    for(i = 0; i < n_col; i++) {
-        // printf(BOLD_ON "\t\x1b[4m#%d  " BOLD_OFF,i); // i
+    for(i = 0; i < n_col; i++)
         printf("\t#%d  ",i);
-    }
+    
     printf("\n\n");
     for(i = 0; i < n_row; i++) {
-        // printf(BOLD_ON "#%d | " BOLD_OFF,i); // h
-        printf("#%d | ",i); // h
-            
+
+        printf("#%d | ",i);     
         for(j = 0; j < n_col; j++){
             if (mat[i][j] >= 0 && c == 'P')
                 printf("\t  %d  ", mat[i][j]);

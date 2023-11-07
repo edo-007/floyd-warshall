@@ -1,16 +1,27 @@
-FLAGS = -Wall
+FLAGS = -Wall 
 CC = gcc
 
+ifeq ($(ff),use)
+	FLAGS += -march=native -mtune=native -Ofast -funroll-loops
+# march:  Specify the type of the target processor; possibilities are ( native->  Selects the CPU of the compiling machine)
 
-# nvc -O3 -fopenmp -mp=gpu -gpu=cc70 -mavx2 -mfma 
+# funroll-loops
+#            Unroll loops whose number of iterations can be determined at compile time or upon entry to the loop.  -funroll-loops
+#            implies -frerun-cse-after-loop.  This option makes code larger, and may or may not make it run faster.
+endif
 
 ifeq ($(USE_OMP),y)
-	FLAGS += -fopenmp -D_USE_OMP=1
+	FLAGS += -fopenmp -D_USE_OMP=1 -O3
+	CC = nvc
+endif
+
+ifeq ($(USE_OMP_TARGET),y)
+	FLAGS += -fopenmp -D_USE_OMP_TARGET=1
 	CC = nvc
 endif
 
 ifeq ($(USE_MPI),y)
-	FLAGS += -D_USE_MPI=1
+	FLAGS += -D_USE_MPI=1 -O3
 	CC = mpicc
 endif
 

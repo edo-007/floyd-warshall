@@ -1,0 +1,14 @@
+mpicc -Wall  -D_USE_MPI=1 -O3 -g -c lib/floyd-library.c -o lib/floyd-library.o
+mpicc -Wall  -D_USE_MPI=1 -O3 -g -c lib/time-library.c -o lib/time-library.o
+mpicc -Wall  -D_USE_MPI=1 -O3 -g -c floyd-main.c
+mpicc -Wall  -D_USE_MPI=1 -O3 -g -o floyd-main floyd-main.o lib/floyd-library.o lib/time-library.o 
+
+:: Using [MPI] ::
+	* Communicator size = 1
+
+N: 4096
+NREP:20
+
+media: 86.740932
+
+media: 87.079207

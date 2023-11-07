@@ -5,14 +5,14 @@
 #define BOLD_ON  "\e[1m"
 #define BOLD_OFF  "\e[m"
 #define ROOT 0
-#define SEED 7
+#define SEED 8
 
 #ifdef _PRINT_DISTANCE
     #define N    8
     #define NREP 1
 #else
-    #define N    1024
-    #define NREP 1
+    #define N    (1024 * 2)
+    #define NREP 20
 #endif
 
 void stampa_matrice(int (*mat)[N], int n_row, int n_col, int c);

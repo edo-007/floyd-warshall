@@ -27,9 +27,6 @@ int main(int argc, char **argv){ /* ____________________________________________
     mpi_rank = 0.0;
     mpi_size = 0.0;
     
-
-    char graph_path[] = "graph/graph.dot";
-
     // char *fname = "graph.dot";
     int (*G) [ N ] ; // puntatore ad array di N elementi interi
 
@@ -96,12 +93,14 @@ int main(int argc, char **argv){ /* ____________________________________________
     #ifdef _USE_OMP
         printf("\n:: Using [OMP] ::\n");
         printf("\t* Number of threads = %d\n\n", omp_get_max_threads() );
+        printf("\nN: %d\nNREP:%d\n", N,NREP);
 
     #elif _USE_MPI 
 
         if ( mpi_rank == 0) { 
             printf("\n:: Using [MPI] ::\n");
             printf("\t* Communicator size = %d\n", mpi_size);
+            printf("\nN: %d\nNREP:%d\n", N,NREP);
         }
     #else 
         printf("\n:: Serial version ::");
@@ -115,6 +114,7 @@ int main(int argc, char **argv){ /* ____________________________________________
  *_____________________________________
 */
 
+    
     int rep;
     for ( rep = 0; rep < NREP; rep++) {
 
@@ -128,9 +128,7 @@ int main(int argc, char **argv){ /* ____________________________________________
         }
 #endif
 
-
         FloydAlgorithmm(G,C,D,P, mpi_size, mpi_rank);
-
 
 #ifdef _USE_MPI
         if ( mpi_rank == ROOT) {
@@ -151,20 +149,18 @@ int main(int argc, char **argv){ /* ____________________________________________
     if ( mpi_rank != ROOT )
         exit(EXIT_SUCCESS);
 #endif
-    printAPSP(G,C,D,P);
-    printGraph(G, C, graph_path);
-    exit(EXIT_SUCCESS);
-    
+
     mean = sum/(float)NREP;
     printf("\nmedia: %lf\n", mean);
 
-
 #ifdef _PRINT_DISTANCE
+
+    printAPSP(G,C,D,P);
+    printGraph(G, C, "graph/graph.dot");
+
+    /* stampa della matrice */
     stampa_matrice(D,N,N,'D');
 #endif
-
-    // printGraph( G,C, fname );
-    // printAPSP(G,C,D,P);
 
     return 0;
 }

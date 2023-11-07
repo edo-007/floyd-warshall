@@ -1,10 +1,14 @@
-nvc -Wall -fopenmp -D_USE_OMP=1 -g -c lib/floyd-library.c -o lib/floyd-library.o
-nvc -Wall -fopenmp -D_USE_OMP=1 -g -c lib/time-library.c -o lib/time-library.o
-nvc -Wall -fopenmp -D_USE_OMP=1 -g -c floyd-main.c
-nvc -Wall -fopenmp -D_USE_OMP=1 -g -o floyd-main floyd-main.o lib/floyd-library.o lib/time-library.o 
+nvc -Wall  -fopenmp -D_USE_OMP=1 -O3 -g -c lib/floyd-library.c -o lib/floyd-library.o
+nvc -Wall  -fopenmp -D_USE_OMP=1 -O3 -g -c lib/time-library.c -o lib/time-library.o
+nvc -Wall  -fopenmp -D_USE_OMP=1 -O3 -g -c floyd-main.c
+nvc -Wall  -fopenmp -D_USE_OMP=1 -O3 -g -o floyd-main floyd-main.o lib/floyd-library.o lib/time-library.o 
+1
 
 :: Using [OMP] ::
-	* Number of threads = 12
+	* Number of threads = 1
 
 
-media: 0.542093
+N: 4096
+NREP:20
+
+media: 82.385949
